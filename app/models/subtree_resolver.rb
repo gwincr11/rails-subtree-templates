@@ -1,4 +1,7 @@
 class SubtreeResolver < ActionView::Resolver
+  require "singleton"
+  include Singleton
+
   def find_templates(name, prefix, partial, details, outside_app_allowed = false)
     puts name
     puts prefix
