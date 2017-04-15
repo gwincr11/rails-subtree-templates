@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
-  append_view_path SubtreeResolver.new
+  prepend_view_path SubtreeResolver.new
 
   def index
-
+    render template: params[:page]
   end
 end
