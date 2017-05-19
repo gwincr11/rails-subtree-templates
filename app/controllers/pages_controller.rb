@@ -9,7 +9,6 @@ class PagesController < ActionController::Base
   helper PagesHelper
   prepend_view_path @@resolver
 
-
   def index
     @var1 = 'hello'
     @@resolver.request = request

@@ -9,7 +9,7 @@ class SubtreeResolver < ActionView::Resolver
     requested = normalize_path(name, prefix)
 
     folder = content_folder_for(request.domain)
-    path = File.expand_path("../../../content/#{folder}/#{requested}.#{format}", __FILE__)
+    path = File.expand_path("../../../content/#{request.domain}/#{folder}/#{requested}.#{format}", __FILE__)
     (1..4).reject{|x| x == 3}.collect{|x| x + 1}
     paths = details[:handlers].reject{|lang| !File.exists?("#{path}.#{lang.to_s}") }
       .collect{|lang| "#{path}.#{lang.to_s}" }
