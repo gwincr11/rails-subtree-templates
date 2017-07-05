@@ -1,9 +1,9 @@
 ---
 domains:
   domain1.com:
-    content_repo: 'https://github.com/gwincr11/content_test1'
-    layout_repo:  'https://github.com/gwincr11/layout_test1'
+    content_repo: 'https://github.com/thejandroman/content_test1'
+    layout_repo:  'https://github.com/thejandroman/layout_test1'
   domain2.com:
     # What should we do with extension validation
     content_repo: 'https://github.com/thejandroman/content_test2'
-    layout_repo:  'https://github.com/gwincr11/layout_test2'
+    layout_repo:  'https://github.com/thejandroman/layout_test2'
