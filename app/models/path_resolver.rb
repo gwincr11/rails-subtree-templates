@@ -15,7 +15,9 @@ class PathResolver
   end
 
   def content_root
-    File.expand_path("../../../content/", __FILE__)
+    path = File.expand_path("../../../content/", __FILE__)
+    path = "#{path}/#{domain}"
+    path
   end
 
   # Return the last folder in the content path

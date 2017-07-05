@@ -13,7 +13,7 @@ class Branches
   def initialize(path)
     @path = path
     @git = Git.open(path)
-    @branches = @git.branches.local
+    @branches = @git.branches.remote
     @current_branch = @git.current_branch
   end
 
