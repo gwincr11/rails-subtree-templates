@@ -13,13 +13,12 @@ class SubtreeResolver < ActionView::Resolver
   def find_templates(name, prefix, partial, details, outside_app_allowed = false)
     format = details[:formats][0]
     requested = normalize_path(name, prefix)
+    path_no_ext = File.
+      expand_path("#{content_paths.content_path}/#{requested}", __FILE__)
+    path = "#{path_no_ext}.#{format}"
 
-    path = File.
-      expand_path("#{content_paths.content_path}/#{requested}.#{format}", __FILE__)
-
-    paths = details[:handlers]
-      .reject{|lang| !File.file?("#{path}.#{lang.to_s}") && !File.symlink?("#{path}.#{lang.to_s}") }
-      .collect{|lang| "#{path}.#{lang.to_s}" }
+    paths = collect_templates(path, details[:handlers])
+    paths.concat collect_templates(path_no_ext, details[:handlers])
 
 
     paths << path if File.exists?(path)
@@ -35,7 +34,8 @@ class SubtreeResolver < ActionView::Resolver
   def initialize_template(path)
     source = File.binread(path)
     identifier = path
-    handler = ActionView::Template.registered_template_handler('erb')
+    handler = path.split('.').last
+    handler = ActionView::Template.registered_template_handler(handler)
 
     details = {
       format: Mime['html'],
@@ -55,5 +55,11 @@ class SubtreeResolver < ActionView::Resolver
   # Normalize arrays by converting all symbols to strings.
   def normalize_array(array)
     array.map(&:to_s)
+  end
+
+  def collect_templates(path, handlers)
+    handlers
+      .reject{|lang| !File.file?("#{path}.#{lang.to_s}") && !File.symlink?("#{path}.#{lang.to_s}") }
+      .collect{|lang| "#{path}.#{lang.to_s}" }
   end
 end
