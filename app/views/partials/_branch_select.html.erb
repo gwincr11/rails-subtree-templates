@@ -7,5 +7,10 @@
     <% end %>
   <% end %>
   <%= f.submit 'show branch' %>
+
+  <a href="<%= @branches.edit_path %>" target='_blank'>Edit on Github</a>
 <% end %>
+
+Current sha: <%= @branches.current_sha %>
+
 
