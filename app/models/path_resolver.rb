@@ -27,6 +27,9 @@ class PathResolver
     File.join(content_path, path[0..-2])
   end
 
+  def view_path
+  end
+
   private
 
   def get_content_path
@@ -42,6 +45,7 @@ class PathResolver
 
     @layout_path = "#{domain}/#{repo}/application.html.erb"
   end
+
 
   def configs
     @configs ||= YAML.load_file("domains.yml")

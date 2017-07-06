@@ -1,0 +1,13 @@
+<hr>
+Super fancy staff bar
+<p>
+<% if current_user %>
+  <%= render 'partials/branch_select' %>
+  <a href="/logout">Log out</a>
+
+<% else %>
+  <a href="/auth/githubber">Login</a>
+<% end %>
+<p/>
+<hr>
+

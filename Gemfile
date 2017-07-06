@@ -32,6 +32,9 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+gem 'github-sso-rails', github: 'github/github-sso-rails'
+gem 'omniauth-githubber', github: 'github/omniauth-githubber'
+
 gem 'git'
 
 gem 'pry'
