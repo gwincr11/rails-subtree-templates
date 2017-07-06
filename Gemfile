@@ -34,7 +34,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'github-sso-rails', github: 'github/github-sso-rails'
 gem 'omniauth-githubber', github: 'github/omniauth-githubber'
-
+gem 'rugged', git: 'git://github.com/libgit2/rugged.git', submodules: true
 gem 'git'
 gem 'markdown-rails'
 gem 'pry'
