@@ -43,7 +43,7 @@ class Branches
   def file_path
     path = @params.fetch(:page, 'index')
     template = TemplateCandidates
-      .new(path, 'html', [:erb], @path.content_path).find[0]
+      .new(path, 'html', [:erb, :md], @path.content_path).find[0]
     template.gsub(@path.content_path, '')
   end
 

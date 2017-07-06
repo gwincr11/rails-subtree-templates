@@ -36,7 +36,7 @@ gem 'github-sso-rails', github: 'github/github-sso-rails'
 gem 'omniauth-githubber', github: 'github/omniauth-githubber'
 
 gem 'git'
-
+gem 'markdown-rails'
 gem 'pry'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

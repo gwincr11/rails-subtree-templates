@@ -28,7 +28,8 @@ class SubtreeResolver < ActionView::Resolver
   def initialize_template(path)
     source = File.binread(path)
     identifier = path
-    handler = ActionView::Template.registered_template_handler('erb')
+    handler = path.split('.').last
+    handler = ActionView::Template.registered_template_handler(handler)
 
     details = {
       format: Mime['html'],
@@ -67,7 +68,12 @@ class TemplateCandidates
   private
 
   def potential_templates
-    path = template_path
+    paths = collect_templates(template_path)
+    paths.concat collect_templates(template_path_no_ext)
+  end
+
+
+  def collect_templates(path)
     paths = handlers
       .reject{|lang| !File.file?("#{path}.#{lang.to_s}") && !File.symlink?("#{path}.#{lang.to_s}") }
       .collect{|lang| "#{path}.#{lang.to_s}" }
@@ -76,7 +82,17 @@ class TemplateCandidates
     paths
   end
 
+  def template_path_no_ext
+    File.expand_path("#{content_path}/#{requested}", __FILE__)
+  end
+
   def template_path
-    File.expand_path("#{content_path}/#{requested}.#{format}", __FILE__)
+    "#{template_path_no_ext}.#{format}"
+  end
+
+  def collect_templates(path)
+    handlers
+      .reject{|lang| !File.file?("#{path}.#{lang.to_s}") && !File.symlink?("#{path}.#{lang.to_s}") }
+      .collect{|lang| "#{path}.#{lang.to_s}" }
   end
 end
