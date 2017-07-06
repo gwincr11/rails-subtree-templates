@@ -39,6 +39,7 @@ class Branches
   end
 
   def can_view_branches?(user)
+    return false unless user
     client = Octokit::Client.new(login: ENV['OCTOKIT_LOGIN'], access_token: ENV['OCTOKIT_TOKEN'])
     repo = Octokit::Repository.from_url(@git.remote.url)
     client.collaborator?(repo, user.login)
