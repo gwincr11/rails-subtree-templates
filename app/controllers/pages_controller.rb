@@ -8,19 +8,18 @@ class PagesController < ApplicationController
 
 
   def index
+    #git show test1:index.html.erb
     # setup the needed path settings for content
+    puts params[:page]
     paths = PathResolver.new(request)
+    # Setup the git branch tools
+    @branches = Branches.new(paths, params)
+
     @@resolver.request = request
     @@resolver.content_paths = paths
 
     # Set local vars
     @vars = ScopedVarsResolver.new(request, paths, paths.last_folder)
-
-    # Setup the git branch tools
-    @branches = Branches.new(paths.content_path)
-    if params["branches"] && params["branches"]["branch_select"]
-      @branches.checkout params["branches"]["branch_select"]
-    end
 
     render template: params[:page], layout: paths.layout_path
   end

@@ -10,11 +10,17 @@ class Branches
 
   attr_accessor :branches, :current_branch
 
-  def initialize(path)
+  def initialize(path, params)
     @path = path
-    @git = Git.open(path)
+    @git = Git.open(@path.content_path)
+    @params = params
+    set_branch(params)
     @branches = @git.branches.remote
     @current_branch = @git.current_branch
+  end
+
+  def edit_path
+    "#{@git.remote('origin').url}/blob/#{current_branch}/#{file_path}"
   end
 
   def branch_names
@@ -29,5 +35,20 @@ class Branches
     @git.fetch
     @git.checkout(br)
     @current_branch = @git.current_branch
+  end
+
+  private
+
+  def file_path
+    path = @params.fetch(:page, 'index')
+    template = TemplateCandidates
+      .new(path, 'html', [:erb], @path.content_path).find[0]
+    template.gsub(@path.content_path, '')
+  end
+
+  def set_branch(params)
+    if params["branches"] && params["branches"]["branch_select"]
+      checkout params["branches"]["branch_select"]
+    end
   end
 end
