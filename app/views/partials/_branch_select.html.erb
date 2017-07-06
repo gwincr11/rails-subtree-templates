@@ -1,4 +1,4 @@
-<% if current_user && @branches.can_view_branches?(current_user) && @branches.any? %>
+<% if current_user && @branches.can_view_branches?(current_user) && @branches.branch_select.any? %>
   <%= form_for @branches, url: '.', method: 'get' do |f| %>
     <%= f.label :branch, 'Branch name' %>
 

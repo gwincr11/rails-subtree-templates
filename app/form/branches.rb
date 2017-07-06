@@ -51,7 +51,11 @@ class Branches
     path = @params.fetch(:page, 'index')
     template = TemplateCandidates
       .new(path, 'html', [:erb, :md], @path.content_path).find[0]
-    template.gsub(@path.content_path, '')
+    if template
+      template.gsub(@path.content_path, '')
+    else
+      ""
+    end
   end
 
   def set_branch(params)
