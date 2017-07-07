@@ -51,6 +51,6 @@ end
 
 module DomainConfigs
   def self.configs(domain)
-    YAML.load_file("domains.yml")['domains'][domain]
+    YAML.load_file(File.join(Rails.root, "domains.yml"))['domains'][domain]
   end
 end
