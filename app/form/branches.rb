@@ -10,12 +10,12 @@ class Branches
 
   attr_accessor :branches, :current_branch, :current_sha
 
-  def initialize(path, params)
+  def initialize(path, user, params)
     @path = path
     @git = Git.open(@path.content_path)
     @params = params
     set_branch(params)
-    @branches = @git.branches.remote
+    @branches = find_visible_branches(user)
     @current_branch = @git.current_branch
     @current_sha = @git.branch(@current_branch).gcommit.sha
   end
@@ -38,6 +38,13 @@ class Branches
     @current_branch = @git.current_branch
   end
 
+  def can_view_branches?(user)
+    return false unless user
+    client = Octokit::Client.new(login: ENV['OCTOKIT_LOGIN'], access_token: ENV['OCTOKIT_TOKEN'])
+    repo = Octokit::Repository.from_url(@git.remote.url)
+    client.collaborator?(repo, user.login)
+  end
+
   private
 
   def file_path
@@ -45,12 +52,21 @@ class Branches
     puts path
     template = TemplateCandidates
       .new(path, 'html', [:erb, :md], @path.content_path).find[0]
-    template.gsub(@path.content_path, '')
+    if template
+      template.gsub(@path.content_path, '')
+    else
+      ""
+    end
   end
 
   def set_branch(params)
     if params["branches"] && params["branches"]["branch_select"]
       checkout params["branches"]["branch_select"]
     end
+  end
+
+  def find_visible_branches(user)
+    return [] unless can_view_branches?(user)
+    all_branches = @git.branches.remote
   end
 end

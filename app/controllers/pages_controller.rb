@@ -13,7 +13,7 @@ class PagesController < ApplicationController
     puts params[:page]
     paths = PathResolver.new(request)
     # Setup the git branch tools
-    @branches = Branches.new(paths, params)
+    @branches = Branches.new(paths, current_user, params)
 
     @@resolver.request = request
     @@resolver.content_paths = paths

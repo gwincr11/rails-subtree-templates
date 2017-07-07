@@ -1,16 +1,16 @@
-<%= form_for @branches, url: '.', method: 'get' do |f| %>
-  <%= f.label :branch, 'Branch name' %>
+<% if current_user && @branches.can_view_branches?(current_user) && @branches.branch_select.any? %>
+  <%= form_for @branches, url: '.', method: 'get' do |f| %>
+    <%= f.label :branch, 'Branch name' %>
 
-  <%= f.select(:branch_select) do %>
-    <% @branches.branch_select.each do |c| -%>
-      <%= content_tag(:option, c.first, value: c.last, selected: (c.first == @branches.current_branch)) %>
+    <%= f.select(:branch_select) do %>
+      <% @branches.branch_select.each do |c| -%>
+        <%= content_tag(:option, c.first, value: c.last, selected: (c.first == @branches.current_branch)) %>
+      <% end %>
     <% end %>
+    <%= f.submit 'show branch' %>
+
+    <a href="<%= @branches.edit_path %>" target='_blank'>Edit on Github</a>
   <% end %>
-  <%= f.submit 'show branch' %>
 
-  <a href="<%= @branches.edit_path %>" target='_blank'>Edit on Github</a>
+  Current sha: <%= @branches.current_sha %>
 <% end %>
-
-Current sha: <%= @branches.current_sha %>
-
-
