@@ -48,21 +48,17 @@ class ScopedVarsResolver
   # Creates a linked list of parent variables
   # by recursively traversing the parent directories.
   def get_parent_scope
-    puts "root #{root?}"
-    puts "parent #{parent_path}"
-    puts "root path #{@paths.content_root}"
     return if root?
 
-    puts "Recurse"
     @parent = ScopedVarsResolver.new(request, paths, parent_path)
   end
 
   def root?
-    File.identical?(parent_path, @paths.content_root)
+    File.identical?(current_path, @paths.content_path)
   end
 
   def parent_path
-    File.join(current_path, '..')
+    Pathname.new(current_path).parent
   end
 
   # Magic!

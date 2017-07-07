@@ -89,10 +89,4 @@ class TemplateCandidates
   def template_path
     "#{template_path_no_ext}.#{format}"
   end
-
-  def collect_templates(path)
-    handlers
-      .reject{|lang| !File.file?("#{path}.#{lang.to_s}") && !File.symlink?("#{path}.#{lang.to_s}") }
-      .collect{|lang| "#{path}.#{lang.to_s}" }
-  end
 end
