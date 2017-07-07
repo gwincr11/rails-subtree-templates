@@ -28,6 +28,7 @@ class SubtreeResolver < ActionView::Resolver
   # Initialize an ActionView::Template object based on the record found.
   def initialize_template(path)
     source = GitPath.show(path, content_paths.content_path, @git)
+    source = follow_symlink(source)
 
     identifier = path
     handler = path.split('.').last
@@ -40,6 +41,13 @@ class SubtreeResolver < ActionView::Resolver
     }
 
     ActionView::Template.new(source, identifier, handler, details)
+  end
+
+  def follow_symlink(source)
+    Pathname.new(source)
+    GitPath.show(source, content_paths.content_path, @git)
+  rescue
+    source
   end
 
   # Normalize name and prefix, so the tuple ["index", "users"] becomes
