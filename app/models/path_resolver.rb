@@ -27,27 +27,30 @@ class PathResolver
     File.join(content_path, path[0..-2])
   end
 
-  def view_path
-  end
-
   private
 
   def get_content_path
-    uri = configs["domains"][domain]["content_repo"]
+    uri = configs(domain)["content_repo"]
     folder = URI(uri).path.split('/').last
 
     @content_path = File.join(content_root, folder)
   end
 
   def get_layout_path
-    uri = configs["domains"][domain]["layout_repo"]
+    uri = configs(domain)["layout_repo"]
     repo = URI(uri).path.split('/').last
 
     @layout_path = "#{domain}/#{repo}/application.html.erb"
   end
 
 
-  def configs
-    @configs ||= YAML.load_file("domains.yml")
+  def configs(domain)
+    DomainConfigs.configs(domain)
+  end
+end
+
+module DomainConfigs
+  def self.configs(domain)
+    @configs ||= YAML.load_file("domains.yml")['domains'][domain]
   end
 end

@@ -8,9 +8,10 @@ require 'URI'
 # templates.
 #
 class SubtreeResolver < ActionView::Resolver
-  attr_accessor :request, :content_paths
+  attr_accessor :request, :content_paths, :git
 
-  def find_templates(name, prefix, partial, details, outside_app_allowed = false)
+  def find_templates(name, prefix, partial,
+                     details, outside_app_allowed = false)
     format = details[:formats][0]
     requested = normalize_path(name, prefix)
     handlers = details[:handlers]
@@ -18,7 +19,7 @@ class SubtreeResolver < ActionView::Resolver
   end
 
   def collect_templates(requested, format, handlers)
-    TemplateCandidates.new(requested, format, handlers, content_paths.content_path)
+    TemplateCandidates.new(requested, format, handlers, content_paths.content_path, git)
       .find.map do |candidate_path|
       initialize_template(candidate_path)
     end
@@ -26,14 +27,15 @@ class SubtreeResolver < ActionView::Resolver
 
   # Initialize an ActionView::Template object based on the record found.
   def initialize_template(path)
-    source = File.binread(path)
+    source = GitPath.show(path, content_paths.content_path, @git)
+
     identifier = path
     handler = path.split('.').last
     handler = ActionView::Template.registered_template_handler(handler)
 
     details = {
       format: Mime['html'],
-      updated_at: File.mtime(path),
+      updated_at: Date.today,
       virtual_path: path
     }
 
@@ -50,19 +52,16 @@ end
 class TemplateCandidates
   attr_reader :requested, :format, :handlers, :content_path
 
-  def initialize(requested, format, handlers, content_path)
+  def initialize(requested, format, handlers, content_path, git)
     @requested = requested
     @format = format
     @handlers = handlers
+    @git = git
     @content_path = content_path
   end
 
   def find
-    potential_templates.map do |candidate_path|
-      # Point to the symlinked file if it is a symlink.
-      candidate_path = File.expand_path("#{content_path}/#{File.readlink(candidate_path)}") if File.symlink?(candidate_path)
-      candidate_path
-    end
+    potential_templates
   end
 
   private
@@ -75,11 +74,15 @@ class TemplateCandidates
 
   def collect_templates(path)
     paths = handlers
-      .reject{|lang| !File.file?("#{path}.#{lang.to_s}") && !File.symlink?("#{path}.#{lang.to_s}") }
+      .reject{|lang| not_found("#{path}.#{lang.to_s}") }
       .collect{|lang| "#{path}.#{lang.to_s}" }
 
-    paths << path if File.exists?(path)
+    paths << path if !not_found(path)
     paths
+  end
+
+  def not_found(path)
+    GitPath.not_found(path, @content_path, @git)
   end
 
   def template_path_no_ext
@@ -89,10 +92,6 @@ class TemplateCandidates
   def template_path
     "#{template_path_no_ext}.#{format}"
   end
-
-  def collect_templates(path)
-    handlers
-      .reject{|lang| !File.file?("#{path}.#{lang.to_s}") && !File.symlink?("#{path}.#{lang.to_s}") }
-      .collect{|lang| "#{path}.#{lang.to_s}" }
-  end
 end
+
+

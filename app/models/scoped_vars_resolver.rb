@@ -19,11 +19,12 @@ class ScopedVarsResolver
   attr_accessor :vars, :parent, :hash, :current_path,
     :request, :paths, :child
 
-  def initialize(request, paths, current_path)
+  def initialize(request, paths, current_path, git)
     @request = request
     @paths = paths
     @current_path = current_path
     @child = false
+    @git = git
     get_current_scope
     get_parent_scope
   end
@@ -37,8 +38,9 @@ class ScopedVarsResolver
   # file path depth
   def get_current_scope
     @vars = {}
-    return unless File.file?(config_path)
-    @vars = YAML.load_file(config_path)
+    return unless GitPath.found(config_path, @paths.content_path, @git)
+
+    @vars = YAML.load(GitPath.show(config_path, @paths.content_path, @git))
   end
 
   def config_path
@@ -48,21 +50,17 @@ class ScopedVarsResolver
   # Creates a linked list of parent variables
   # by recursively traversing the parent directories.
   def get_parent_scope
-    puts "root #{root?}"
-    puts "parent #{parent_path}"
-    puts "root path #{@paths.content_root}"
     return if root?
 
-    puts "Recurse"
-    @parent = ScopedVarsResolver.new(request, paths, parent_path)
+    @parent = ScopedVarsResolver.new(request, paths, parent_path, @git)
   end
 
   def root?
-    File.identical?(parent_path, @paths.content_root)
+    File.identical?(current_path, @paths.content_path)
   end
 
   def parent_path
-    File.join(current_path, '..')
+    Pathname.new(current_path).parent
   end
 
   # Magic!
