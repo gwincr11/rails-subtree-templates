@@ -34,8 +34,10 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'github-sso-rails', github: 'github/github-sso-rails'
 gem 'omniauth-githubber', github: 'github/omniauth-githubber'
+gem 'dotenv-rails'
 gem 'git'
 gem 'markdown-rails'
+gem 'octokit'
 gem 'pry'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

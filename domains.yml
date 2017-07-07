@@ -3,10 +3,17 @@ domains:
   domain1.com:
     content_repo: 'https://github.com/gwincr11/content_test1'
     layout_repo:  'https://github.com/gwincr11/layout_test1'
+    sso_client_id: '383954ae4598f7825afe'
+    sso_client_secret: 'f47d16c996af407b884a8b899d0bc5d0ac9d1242'
   domain2.com:
     # What should we do with extension validation
     content_repo: 'https://github.com/thejandroman/content_test2'
     layout_repo:  'https://github.com/gwincr11/layout_test2'
+    sso_client_id: 'bfdf0a09c9fd3bdeaa62'
+    sso_client_secret: '4081b3cd7b8f75a220ba14f2f53c2e5d39a1a1b6'
   localhubber.com:
     content_repo: 'https://github.com/github/docs'
     layout_repo:  'https://github.com/gwincr11/layout_test2'
+    sso_client_id: 'd3183f2206c76dafe976'
+    sso_client_secret: 'b322a6c01ebf1f5ffb2685daf2ba9bd30a7c8498'
+

@@ -51,6 +51,6 @@ end
 
 module DomainConfigs
   def self.configs(domain)
-    @configs ||= YAML.load_file("domains.yml")['domains'][domain]
+    YAML.load_file("domains.yml")['domains'][domain]
   end
 end

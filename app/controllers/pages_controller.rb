@@ -12,7 +12,7 @@ class PagesController < ApplicationController
     paths = PathResolver.new(request)
     set_branch
     # Setup the git branch tools
-    @branches = Branches.new(paths, params, cookies)
+    @branches = Branches.new(paths, current_user, params, cookies)
 
     @@resolver.git = @branches
     @@resolver.request = request
