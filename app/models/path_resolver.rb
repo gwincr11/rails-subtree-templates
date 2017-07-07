@@ -53,6 +53,9 @@ class PathResolver
 end
 
 module DomainConfigs
+  #
+  # SSO will not work with this because of the different domain?
+  #
   def self.configs(domain)
     configs = YAML.load_file("domains.yml")['domains']
     domain_configs =configs[domain]

@@ -17,6 +17,7 @@ task :create_update_domains do
   content = Pathname.new(CONTENT_FOLDER)
 
   domains.each do |domain, repos|
+    next if repos.has_key? 'alias'
     domain_dir  = content + domain
     content_dir = domain_dir + URI.parse(repos['content_repo']).path.split('/').last
 
