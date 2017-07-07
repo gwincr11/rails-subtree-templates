@@ -32,8 +32,6 @@ class Branches
   end
 
   def checkout(br)
-    @git.fetch
-    @git.checkout(br)
     @current_branch = @git.current_branch
   end
 

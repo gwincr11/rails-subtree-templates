@@ -1,22 +1,20 @@
 require 'YAML'
 
 class PagesController < ApplicationController
-  @@resolver = SubtreeResolver.new
 
   helper PagesHelper
-  prepend_view_path @@resolver
-
 
   def index
+
     # setup the needed path settings for content
     paths = PathResolver.new(request)
     set_branch
     # Setup the git branch tools
     @branches = Branches.new(paths, current_user, params, cookies)
+    # custom git based template resolver
+    @resolver = SubtreeResolver.new(@branches, paths)
+    prepend_view_path @resolver
 
-    @@resolver.git = @branches
-    @@resolver.request = request
-    @@resolver.content_paths = paths
 
     # Set local vars
     @vars = ScopedVarsResolver

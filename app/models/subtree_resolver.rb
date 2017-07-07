@@ -10,6 +10,13 @@ require 'URI'
 class SubtreeResolver < ActionView::Resolver
   attr_accessor :request, :content_paths, :git
 
+  def initialize(git, paths)
+    @git = git
+    @content_paths = paths
+    super()
+  end
+
+
   def find_templates(name, prefix, partial,
                      details, outside_app_allowed = false)
     format = details[:formats][0]
