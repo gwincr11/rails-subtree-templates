@@ -10,3 +10,5 @@ domains:
   localhubber.com:
     content_repo: 'https://github.com/github/docs'
     layout_repo:  'https://github.com/gwincr11/layout_test2'
+  www.domain1.com:
+    alias: 'domain1.com'
