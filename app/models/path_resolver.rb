@@ -27,9 +27,6 @@ class PathResolver
     File.join(content_path, path[0..-2])
   end
 
-  def view_path
-  end
-
   private
 
   def get_content_path
@@ -54,6 +51,6 @@ end
 
 module DomainConfigs
   def self.configs(domain)
-    YAML.load_file("domains.yml")['domains'][domain]
+    YAML.load_file(File.join(Rails.root, "domains.yml"))['domains'][domain]
   end
 end

@@ -19,11 +19,12 @@ class ScopedVarsResolver
   attr_accessor :vars, :parent, :hash, :current_path,
     :request, :paths, :child
 
-  def initialize(request, paths, current_path)
+  def initialize(request, paths, current_path, git)
     @request = request
     @paths = paths
     @current_path = current_path
     @child = false
+    @git = git
     get_current_scope
     get_parent_scope
   end
@@ -37,8 +38,9 @@ class ScopedVarsResolver
   # file path depth
   def get_current_scope
     @vars = {}
-    return unless File.file?(config_path)
-    @vars = YAML.load_file(config_path)
+    return unless GitPath.found(config_path, @paths.content_path, @git)
+
+    @vars = YAML.load(GitPath.show(config_path, @paths.content_path, @git))
   end
 
   def config_path
@@ -50,7 +52,7 @@ class ScopedVarsResolver
   def get_parent_scope
     return if root?
 
-    @parent = ScopedVarsResolver.new(request, paths, parent_path)
+    @parent = ScopedVarsResolver.new(request, paths, parent_path, @git)
   end
 
   def root?

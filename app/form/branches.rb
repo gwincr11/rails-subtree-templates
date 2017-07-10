@@ -8,15 +8,14 @@
 class Branches
   include ActiveModel::Model
 
-  attr_accessor :branches, :current_branch, :current_sha
+  attr_accessor :branches, :current_branch, :current_sha, :git
 
-  def initialize(path, user, params)
+  def initialize(path, user, params, cookies)
     @path = path
     @git = Git.open(@path.content_path)
     @params = params
-    set_branch(params)
     @branches = find_visible_branches(user)
-    @current_branch = @git.current_branch
+    @current_branch = cookies[:branch]
     @current_sha = @git.branch(@current_branch).gcommit.sha
   end
 
@@ -33,8 +32,6 @@ class Branches
   end
 
   def checkout(br)
-    @git.fetch
-    @git.checkout(br)
     @current_branch = @git.current_branch
   end
 
@@ -51,18 +48,8 @@ class Branches
     path = @params.fetch(:page, 'index')
     puts path
     template = TemplateCandidates
-      .new(path, 'html', [:erb, :md], @path.content_path).find[0]
-    if template
-      template.gsub(@path.content_path, '')
-    else
-      ""
-    end
-  end
-
-  def set_branch(params)
-    if params["branches"] && params["branches"]["branch_select"]
-      checkout params["branches"]["branch_select"]
-    end
+      .new(path, 'html', [:erb, :md], @path.content_path, self).find[0]
+    template.gsub(@path.content_path, '')
   end
 
   def find_visible_branches(user)
