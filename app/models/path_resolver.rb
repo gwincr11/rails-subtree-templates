@@ -50,7 +50,16 @@ class PathResolver
 end
 
 module DomainConfigs
+  #
+  # SSO will not work with this because of the different domain?
+  #
   def self.configs(domain)
-    YAML.load_file(File.join(Rails.root, "domains.yml"))['domains'][domain]
+    configs = YAML.load_file("domains.yml")['domains']
+    domain_configs =configs[domain]
+    if domain_configs.has_key?('alias')
+      alias_domain = domain_configs['alias']
+      domain_configs = configs[alias_domain]
+    end
+    domain_configs
   end
 end

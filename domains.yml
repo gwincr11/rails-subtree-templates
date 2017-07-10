@@ -16,4 +16,5 @@ domains:
     layout_repo:  'https://github.com/gwincr11/layout_test2'
     sso_client_id: 'd3183f2206c76dafe976'
     sso_client_secret: 'b322a6c01ebf1f5ffb2685daf2ba9bd30a7c8498'
-
+  www.domain1.com:
+    alias: 'domain1.com'
