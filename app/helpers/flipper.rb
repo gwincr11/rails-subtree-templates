@@ -1,5 +1,3 @@
-require "#{Rails.root}/lib/flipper"
-
 def feature_block(feature_name, &block)
   return unless Flipper::Rails.flipper[feature_name.to_sym].enabled?
 
