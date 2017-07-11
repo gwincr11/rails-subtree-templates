@@ -1,7 +1,7 @@
 ---
 domains:
   domain1.com:
-    content_repo: 'https://github.com/gwincr11/content_test1'
+    content_repo: 'https://github.com/thejandroman/content_test1'
     layout_repo:  'https://github.com/gwincr11/layout_test1'
     sso_client_id: '383954ae4598f7825afe'
     sso_client_secret: 'f47d16c996af407b884a8b899d0bc5d0ac9d1242'
