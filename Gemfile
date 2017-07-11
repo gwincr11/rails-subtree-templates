@@ -61,3 +61,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'flipper'
 gem 'flipper-active_record'
+gem 'flipper-ui'
