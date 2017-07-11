@@ -20,11 +20,17 @@ class PagesController < ApplicationController
     @vars = ScopedVarsResolver
       .new(request, paths, paths.last_folder, @branches)
 
+    allow_iframe
     render template: params[:page], layout: paths.layout_path
   end
 
 
   private
+
+  def allow_iframe
+    # If development or something else?
+    response.headers.except! 'X-Frame-Options'
+  end
 
   def set_branch
     if params["branches"] && params["branches"]["branch_select"]
