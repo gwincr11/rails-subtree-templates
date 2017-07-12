@@ -1,0 +1,19 @@
+#!/bin/bash
+set -e
+
+PATH=/usr/local/bin:$PATH
+
+cp .env.example .env
+
+rbenv local 2.4.1
+
+bundle install
+bundle exec rake create_update_domains
+bundle exec rake db:migrate
+
+echo "# ==> You will need to edit .env and add your login/auth tokens"
+echo "      Generate one at: https://github.com/settings/tokens."
+echo "# ==> You will also need to add
+     \`127.0.0.1 localhost www.domain1.com domain1.com domain2.com localhubber.com\`
+     to /etc/hosts"
+echo "# ==> Once complete, navigate to \`http://domain.com:3000\` to test."
